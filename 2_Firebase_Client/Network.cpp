@@ -4,11 +4,11 @@
 #define WIFI_SSID "Revenant"
 #define WIFI_PASSWORD "12345678"
 
-#define API_KEY "AIzaSyBQWXIzgv66IqOBWpdNwEsf9nPWjnB9aCc" // mine
-#define FIREBASE_PROJECT_ID "firestoretest-bb434"
+//#define API_KEY "AIzaSyBQWXIzgv66IqOBWpdNwEsf9nPWjnB9aCc" // mine
+//#define FIREBASE_PROJECT_ID "firestoretest-bb434"
 
-// #define API_KEY "AIzaSyBj8RsT8ekXCs832OwJeFa9Nz-CTK-emWg" // wasey
-// #define FIREBASE_PROJECT_ID "health-care-d5deb"
+ #define API_KEY "AIzaSyBj8RsT8ekXCs832OwJeFa9Nz-CTK-emWg" // wasey
+ #define FIREBASE_PROJECT_ID "health-care-d5deb"
 #define USER_EMAIL "hamid@fyp.com"
 #define USER_PASSWORD "cui123"
 
