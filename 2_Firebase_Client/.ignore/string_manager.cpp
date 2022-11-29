@@ -31,7 +31,7 @@ void DataManager(String tempstr)
   // filterd_Resistance, filterd_Conductance_voltage 0.00 will be stored in
   // filterd_snore_voltages ? data to be managed in struct b'25.18!Supine
   // position!C:0.00,R:0.00,V:0.0000!0.00!' int data_input=0;
-  
+
   // Serial.println("Working on : " + tempstr);
 
   float filterd_temperatur = 0;

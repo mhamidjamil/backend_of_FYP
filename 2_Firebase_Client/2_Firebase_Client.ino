@@ -6,14 +6,13 @@
 #pragma message(THIS EXAMPLE IS FOR ESP32 ONLY !)
 #error Select ESP32 board.
 #endif
-double R_temperature;
 // Display *display;
 Network *network;
 // ? data to be managed in struct
 // b'25.18!Supine position!C:0.00,R:0.00,V:0.0000!0.00!'
-int data_input = 0;
+// int data_input = 0;
 
-int filterd_temperatur = 0;
+float filterd_temperatur = 0;
 
 String position = "";
 
@@ -21,12 +20,11 @@ float filterd_Conductance = 0;
 float filterd_Resistance = 0.0;
 float filterd_Conductance_voltage = 0.0;
 
-float filterd_snore_voltages=0.0;
+float filterd_snore_voltages = 0.0;
 
-    // ? data manager variables end
-    void
-    tempTask(void *pvParameters);
-bool getTemperature();
+// ? data manager variables end
+void tempTask(void *pvParameters);
+bool Update_values();
 void triggerGetTemp();
 void DataManager(String tempstr);
 /** Task handle for the light value read task */
@@ -76,19 +74,19 @@ void tempTask(void *pvParameters)
   {
     if (tasksEnabled)
     {
-      getTemperature();
+      Update_values();
     }
     // Got sleep again
     vTaskSuspend(NULL);
   }
 }
-bool getTemperature()
+bool Update_values()
 {
 
   //    Serial.println("DHT11 error status: " + String(dht.getStatusString()));
-  if (R_temperature > 10)
+  if (filterd_temperatur > 10)
   {
-    network->firestoreDataUpdate(R_temperature, (random(45, 50) + 0.3));
+    network->firestoreDataUpdate(filterd_temperatur, (random(45, 50) + 0.3));
   }
   else
   {
@@ -118,15 +116,16 @@ void loop()
   String tempStr;
   if (Serial.available() > 0)
   {
-    data_input = 1;
+    // data_input = 1;
     while (Serial.available())
     {
       tempStr = Serial.readStringUntil('#');
     }
+    if (tempStr.length() > 10)
+      DataManager(tempStr);
+    // Serial.println(tempStr);
 
-    Serial.println(tempStr);
-
-    // R_temperature = Serial.parseFloat();
+    // filterd_temperatur = Serial.parseFloat();
     // network->firestoreDataUpdate(temperature, 0);
   }
 
@@ -152,15 +151,16 @@ void initNetwork()
 
 void DataManager(String tempstr)
 {
-  float filterd_temperatur = 0;
+  Serial.println("Working on : " + tempstr);
+  float func_temperature = 0;
 
-  String position = "";
+  String func_position = "";
 
-  float filterd_Conductance = 0;
-  float filterd_Resistance = 0.0;
-  float filterd_Conductance_voltage = 0.0;
+  float func_Conductance = 0;
+  float func_Resistance = 0.0;
+  float func_Resistance_voltage = 0.0;
+  float func_snore_voltages = 0.0;
 
-  float filterd_snore_voltages = 0.0;
   int first_exclamation = tempstr.indexOf('!');
   int second_exclamation = tempstr.indexOf('!', first_exclamation + 1);
   int third_exclamation = tempstr.indexOf('!', second_exclamation + 1);
@@ -171,12 +171,12 @@ void DataManager(String tempstr)
   // Serial.println("3rd ! sppoted at position : " + String(third_exclamation));
 
   String temp = tempstr.substring(2, first_exclamation);
-  filterd_temperatur = temp.toFloat();
+  func_temperature = temp.toFloat();
 
-  Serial.println("filterd_temperatur: " + String(filterd_temperatur));
+  Serial.println("func_temperature: " + String(func_temperature));
 
-  position = tempstr.substring(first_exclamation + 1, second_exclamation);
-  Serial.println("position: " + position);
+  func_position = tempstr.substring(first_exclamation + 1, second_exclamation);
+  Serial.println("position: " + func_position);
 
   String temp1 = tempstr.substring(second_exclamation + 1, third_exclamation);
   int first_coma = temp1.indexOf(',');
@@ -184,19 +184,29 @@ void DataManager(String tempstr)
   int third_coma = temp1.indexOf(',', second_coma + 1);
 
   String temp2 = temp1.substring(0, first_coma);
-  filterd_Conductance = temp2.toFloat();
-  Serial.println("filterd_Conductance: " + String(filterd_Conductance));
+  func_Conductance = temp2.toFloat();
+  Serial.println("filterd_Conductance: " + String(func_Conductance));
 
   String temp3 = temp1.substring(first_coma + 1, second_coma);
-  filterd_Resistance = temp3.toFloat();
-  Serial.println("filterd_Resistance: " + String(filterd_Resistance));
+  func_Resistance = temp3.toFloat();
+  Serial.println("filterd_Resistance: " + String(func_Resistance));
 
   String temp4 = temp1.substring(second_coma + 1, third_exclamation);
-  filterd_Conductance_voltage = temp4.toFloat();
+  func_Resistance_voltage = temp4.toFloat();
   Serial.println("filterd_Conductance_voltage: " +
-                 String(filterd_Conductance_voltage));
+                 String(func_Resistance_voltage));
 
   String temp5 = tempstr.substring(third_exclamation + 1, fourth_exclamation);
-  filterd_snore_voltages = temp5.toFloat();
-  Serial.println("filterd_snore_voltages: " + String(filterd_snore_voltages));
+  func_snore_voltages = temp5.toFloat();
+  Serial.println("filterd_snore_voltages: " + String(func_snore_voltages));
+  // int data_input = 0;
+
+  filterd_temperatur = func_temperature;
+
+  position = func_position;
+
+  filterd_Conductance = func_Conductance;
+  filterd_Resistance = func_Resistance;
+  filterd_Conductance_voltage = func_Resistance_voltage;
+  filterd_snore_voltages = func_snore_voltages;
 }
