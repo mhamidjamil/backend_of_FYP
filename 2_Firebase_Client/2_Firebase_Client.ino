@@ -71,7 +71,7 @@ bool getTemperature()
 {
 
   //    Serial.println("DHT11 error status: " + String(dht.getStatusString()));
-  network->firestoreDataUpdate(random(35, 40), random(45, 50));
+  network->firestoreDataUpdate((random(45, 50)+0.2), (random(45, 50)+0.3));
 
   return true;
 }

@@ -58,11 +58,13 @@ void Network::firebaseInit(){
 
 void Network::firestoreDataUpdate(double temp, double humi){
   if(WiFi.status() == WL_CONNECTED && Firebase.ready()){
-    String documentPath = "patients/patient_1";
+//    String documentPath = "House/Room_1";
+String documentPath = "users/SKdRiOAIL4NMiAkgrfmq";
 
     FirebaseJson content;
 
     content.set("fields/temperature/doubleValue", String(temp).c_str());
+    // "temp" : temp
     content.set("fields/humidity/doubleValue", String(humi).c_str());
 
     if(Firebase.Firestore.patchDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw(), "temperature,humidity")){
