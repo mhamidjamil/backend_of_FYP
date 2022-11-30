@@ -100,7 +100,7 @@ bool Update_values()
   // }
 //    else
 //  {
-//    network->firestoreDataUpdate(37.6, (random(45, 50) + 0.3));
+//    network->firestoreDataUpdateResistance_GSR_(372113.62);
 //  }
 
   return true;

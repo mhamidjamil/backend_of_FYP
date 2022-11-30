@@ -110,7 +110,7 @@ void Network::firestoreDataUpdate(double temp, String position, double conductan
     // "temp" : temp
     content.set("fields/position/stringValue", String(position).c_str());
     content.set("fields/conductance/doubleValue", String(conductance).c_str());
-    content.set("fields/resistence/doubleValue", String(resistance).c_str());
+    content.set("fields/resistance/doubleValue", String(resistance).c_str());
     content.set("fields/resistive_voltages/doubleValue", String(resistive_voltages).c_str());
     content.set("fields/snore_voltages/doubleValue", String(snore_voltages).c_str());
 
