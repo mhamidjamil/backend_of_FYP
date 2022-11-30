@@ -97,7 +97,7 @@ void Network::firestoreDataUpdate(double temp, double humi)
     }
   }
 }
-void Network::firestoreDataUpdate(double temp, String position, double conductance, double resistence, double resistive_voltages, double snore_voltages)
+void Network::firestoreDataUpdate(double temp, String position, double conductance, double resistance, double resistive_voltages, double snore_voltages)
 {
   if (WiFi.status() == WL_CONNECTED && Firebase.ready())
   {
@@ -110,12 +110,12 @@ void Network::firestoreDataUpdate(double temp, String position, double conductan
     // "temp" : temp
     content.set("fields/position/stringValue", String(position).c_str());
     content.set("fields/conductance/doubleValue", String(conductance).c_str());
-    content.set("fields/resistence/doubleValue", String(resistence).c_str());
+    content.set("fields/resistence/doubleValue", String(resistance).c_str());
     content.set("fields/resistive_voltages/doubleValue", String(resistive_voltages).c_str());
     content.set("fields/snore_voltages/doubleValue", String(snore_voltages).c_str());
 
     if (Firebase.Firestore.patchDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw(),
-                                         "temperature,position,conductance,resistence,resistive_voltages,snore_voltages"))
+                                         "temperature,position,conductance,resistance,resistive_voltages,snore_voltages"))
     {
       Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
       return;

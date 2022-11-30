@@ -20,7 +20,7 @@ public:
   Network();
   void initWiFi();
   void firestoreDataUpdate(double temp, double humi);
-  void firestoreDataUpdate(double temp, String position, double conductance, double resistence, double resistive_voltages, double snore_voltages);
+  void firestoreDataUpdate(double temp, String position, double conductance, double resistance, double resistive_voltages, double snore_voltages);
 };
 
 #endif
