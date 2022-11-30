@@ -4,40 +4,46 @@
 #define WIFI_SSID "Revenant"
 #define WIFI_PASSWORD "12345678"
 
-//#define API_KEY "AIzaSyBQWXIzgv66IqOBWpdNwEsf9nPWjnB9aCc" // mine
-//#define FIREBASE_PROJECT_ID "firestoretest-bb434"
+// #define API_KEY "AIzaSyBQWXIzgv66IqOBWpdNwEsf9nPWjnB9aCc" // mine
+// #define FIREBASE_PROJECT_ID "firestoretest-bb434"
 
- #define API_KEY "AIzaSyBj8RsT8ekXCs832OwJeFa9Nz-CTK-emWg" // wasey
- #define FIREBASE_PROJECT_ID "health-care-d5deb"
+#define API_KEY "AIzaSyBj8RsT8ekXCs832OwJeFa9Nz-CTK-emWg" // wasey
+#define FIREBASE_PROJECT_ID "health-care-d5deb"
 #define USER_EMAIL "hamid@fyp.com"
 #define USER_PASSWORD "cui123"
 
 static Network *instance = NULL;
 
-Network::Network(){
+Network::Network()
+{
   instance = this;
 }
 
-void WiFiEventConnected(WiFiEvent_t event, WiFiEventInfo_t info){
+void WiFiEventConnected(WiFiEvent_t event, WiFiEventInfo_t info)
+{
   Serial.println("WIFI CONNECTED! BUT WAIT FOR THE LOCAL IP ADDR");
 }
 
-void WiFiEventGotIP(WiFiEvent_t event, WiFiEventInfo_t info){
+void WiFiEventGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
+{
   Serial.print("LOCAL IP ADDRESS: ");
   Serial.println(WiFi.localIP());
   instance->firebaseInit();
 }
 
-void WiFiEventDisconnected(WiFiEvent_t event, WiFiEventInfo_t info){
+void WiFiEventDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
+{
   Serial.println("WIFI DISCONNECTED!");
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 }
 
-void FirestoreTokenStatusCallback(TokenInfo info){
+void FirestoreTokenStatusCallback(TokenInfo info)
+{
   Serial.printf("Token Info: type = %s, status = %s\n", getTokenType(info).c_str(), getTokenStatus(info).c_str());
 }
 
-void Network::initWiFi(){
+void Network::initWiFi()
+{
   WiFi.disconnect();
   WiFi.onEvent(WiFiEventConnected, SYSTEM_EVENT_STA_CONNECTED);
   WiFi.onEvent(WiFiEventGotIP, SYSTEM_EVENT_STA_GOT_IP);
@@ -45,7 +51,8 @@ void Network::initWiFi(){
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 }
 
-void Network::firebaseInit(){
+void Network::firebaseInit()
+{
   config.api_key = API_KEY;
 
   auth.user.email = USER_EMAIL;
@@ -56,10 +63,12 @@ void Network::firebaseInit(){
   Firebase.begin(&config, &auth);
 }
 
-void Network::firestoreDataUpdate(double temp, double humi){
-  if(WiFi.status() == WL_CONNECTED && Firebase.ready()){
-//    String documentPath = "House/Room_1";
-String documentPath = "users/SKdRiOAIL4NMiAkgrfmq";
+void Network::firestoreDataUpdate(double temp, double humi)
+{
+  if (WiFi.status() == WL_CONNECTED && Firebase.ready())
+  {
+    //    String documentPath = "House/Room_1";
+    String documentPath = "users/SKdRiOAIL4NMiAkgrfmq";
 
     FirebaseJson content;
 
@@ -67,17 +76,62 @@ String documentPath = "users/SKdRiOAIL4NMiAkgrfmq";
     // "temp" : temp
     content.set("fields/humidity/doubleValue", String(humi).c_str());
 
-    if(Firebase.Firestore.patchDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw(), "temperature,humidity")){
+    if (Firebase.Firestore.patchDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw(), "temperature,humidity"))
+    {
       Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
       return;
-    }else{
+    }
+    else
+    {
       Serial.println(fbdo.errorReason());
     }
 
-    if(Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw())){
+    if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw()))
+    {
       Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
       return;
-    }else{
+    }
+    else
+    {
+      Serial.println(fbdo.errorReason());
+    }
+  }
+}
+void Network::firestoreDataUpdate(double temp, String position, double conductance, double resistence, double resistive_voltages, double snore_voltages)
+{
+  if (WiFi.status() == WL_CONNECTED && Firebase.ready())
+  {
+    //    String documentPath = "Patient/patient_1";
+    String documentPath = "users/SKdRiOAIL4NMiAkgrfmq";
+
+    FirebaseJson content;
+
+    content.set("fields/temperature/doubleValue", String(temp).c_str());
+    // "temp" : temp
+    content.set("fields/position/stringValue", String(position).c_str());
+    content.set("fields/conductance/doubleValue", String(conductance).c_str());
+    content.set("fields/resistence/doubleValue", String(resistence).c_str());
+    content.set("fields/resistive_voltages/doubleValue", String(resistive_voltages).c_str());
+    content.set("fields/snore_voltages/doubleValue", String(snore_voltages).c_str());
+
+    if (Firebase.Firestore.patchDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw(),
+                                         "temperature,position,conductance,resistence,resistive_voltages,snore_voltages"))
+    {
+      Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
+      return;
+    }
+    else
+    {
+      Serial.println(fbdo.errorReason());
+    }
+
+    if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw()))
+    {
+      Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
+      return;
+    }
+    else
+    {
       Serial.println(fbdo.errorReason());
     }
   }

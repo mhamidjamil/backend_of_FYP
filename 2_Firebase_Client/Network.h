@@ -3,7 +3,8 @@
 
 #include <WiFi.h>
 #include <Firebase_ESP_Client.h>
-class Network{
+class Network
+{
 private:
   FirebaseData fbdo;
   FirebaseAuth auth;
@@ -19,7 +20,7 @@ public:
   Network();
   void initWiFi();
   void firestoreDataUpdate(double temp, double humi);
+  void firestoreDataUpdate(double temp, String position, double conductance, double resistence, double resistive_voltages, double snore_voltages);
 };
-
 
 #endif

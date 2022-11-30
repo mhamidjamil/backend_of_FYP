@@ -10,7 +10,8 @@
 Network *network;
 // ? data to be managed in struct
 // b'25.18!Supine position!C:0.00,R:0.00,V:0.0000!0.00!'
-// int data_input = 0;
+// b'25.15!non-defined position!1.23,4.56,7.8912!3.56!#'
+ bool data_input = false;
 
 float filterd_temperatur = 0;
 
@@ -84,14 +85,23 @@ bool Update_values()
 {
 
   //    Serial.println("DHT11 error status: " + String(dht.getStatusString()));
-  if (filterd_temperatur > 10)
+  if (data_input)
   {
-    network->firestoreDataUpdate(filterd_temperatur, (random(45, 50) + 0.3));
+    network->firestoreDataUpdate(filterd_temperatur, position, filterd_Conductance, filterd_Resistance, filterd_Conductance_voltage, filterd_snore_voltages);
+    data_input = false;
   }
-  else
-  {
-    network->firestoreDataUpdate((random(55, 60) + 0.3), (random(45, 50) + 0.3));
-  }
+  // else if (filterd_temperatur > 10)
+  // {
+  //   network->firestoreDataUpdate(filterd_temperatur, (random(45, 50) + 0.3));
+  // }
+  // else
+  // {
+  //   network->firestoreDataUpdate(37.4, unknown_state, 1.23, 2.34, 3.45, 4.56);
+  // }
+//    else
+//  {
+//    network->firestoreDataUpdate(37.6, (random(45, 50) + 0.3));
+//  }
 
   return true;
 }
@@ -116,7 +126,7 @@ void loop()
   String tempStr;
   if (Serial.available() > 0)
   {
-    // data_input = 1;
+    data_input = true;
     while (Serial.available())
     {
       tempStr = Serial.readStringUntil('#');
@@ -170,7 +180,8 @@ void DataManager(String tempstr)
   // Serial.println("2nd ! sppoted at position : " + String(second_exclamation));
   // Serial.println("3rd ! sppoted at position : " + String(third_exclamation));
 
-  String temp = tempstr.substring(2, first_exclamation);
+  // String temp = tempstr.substring(2, first_exclamation);
+  String temp = tempstr.substring(0, first_exclamation);
   func_temperature = temp.toFloat();
 
   Serial.println("func_temperature: " + String(func_temperature));
