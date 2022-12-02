@@ -97,15 +97,22 @@ void Network::firestoreDataUpdate(double temp, double humi)
       for (int iteration = 0; iteration < 3; iteration++)
       {
         digitalWrite(GREEN, HIGH);
-        delay(100);
+        delay(300);
         digitalWrite(GREEN, LOW);
-        delay(100);
+        delay(300);
       }
       return;
     }
     else
     {
       Serial.println(fbdo.errorReason());
+      for (int iteration = 0; iteration < 3; iteration++)
+      {
+        digitalWrite(BLUE, HIGH);
+        delay(300);
+        digitalWrite(BLUE, LOW);
+        delay(300);
+      }
     }
 
     if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw()))
@@ -114,15 +121,22 @@ void Network::firestoreDataUpdate(double temp, double humi)
       for (int iteration = 0; iteration < 3; iteration++)
       {
         digitalWrite(GREEN, HIGH);
-        delay(100);
+        delay(300);
         digitalWrite(GREEN, LOW);
-        delay(100);
+        delay(300);
       }
       return;
     }
     else
     {
       Serial.println(fbdo.errorReason());
+      for (int iteration = 0; iteration < 3; iteration++)
+      {
+        digitalWrite(BLUE, HIGH);
+        delay(300);
+        digitalWrite(BLUE, LOW);
+        delay(300);
+      }
     }
   }
 }
