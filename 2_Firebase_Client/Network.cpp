@@ -1,9 +1,14 @@
+
+#include <Arduino.h>
+#include <SPI.h>
 #include "Network.h"
 #include "addons/TokenHelper.h"
 
 #define WIFI_SSID "Revenant"
 #define WIFI_PASSWORD "12345678"
-
+#define RED 18
+#define GREEN 23
+#define BLUE 19
 // #define API_KEY "AIzaSyBQWXIzgv66IqOBWpdNwEsf9nPWjnB9aCc" // mine
 // #define FIREBASE_PROJECT_ID "firestoretest-bb434"
 
@@ -17,6 +22,9 @@ static Network *instance = NULL;
 Network::Network()
 {
   instance = this;
+  pinMode(RED, OUTPUT);
+  pinMode(GREEN, OUTPUT);
+  pinMode(BLUE, OUTPUT);
 }
 
 void WiFiEventConnected(WiFiEvent_t event, WiFiEventInfo_t info)
@@ -34,6 +42,13 @@ void WiFiEventGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 void WiFiEventDisconnected(WiFiEvent_t event, WiFiEventInfo_t info)
 {
   Serial.println("WIFI DISCONNECTED!");
+  for (int iteration = 5; iteration > 0; iteration--)
+  {
+    digitalWrite(RED, HIGH);
+    delay(100);
+    digitalWrite(RED, LOW);
+    delay(100);
+  }
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 }
 
@@ -79,6 +94,13 @@ void Network::firestoreDataUpdate(double temp, double humi)
     if (Firebase.Firestore.patchDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw(), "temperature,humidity"))
     {
       Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
+      for (int iteration = 0; iteration < 3; iteration++)
+      {
+        digitalWrite(GREEN, HIGH);
+        delay(100);
+        digitalWrite(GREEN, LOW);
+        delay(100);
+      }
       return;
     }
     else
@@ -89,6 +111,13 @@ void Network::firestoreDataUpdate(double temp, double humi)
     if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw()))
     {
       Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
+      for (int iteration = 0; iteration < 3; iteration++)
+      {
+        digitalWrite(GREEN, HIGH);
+        delay(100);
+        digitalWrite(GREEN, LOW);
+        delay(100);
+      }
       return;
     }
     else
@@ -118,6 +147,13 @@ void Network::firestoreDataUpdate(double temp, String position, double conductan
                                          "temperature,position,conductance,resistance,resistive_voltages,snore_voltages"))
     {
       Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
+      for (int iteration = 0; iteration < 3; iteration++)
+      {
+        digitalWrite(GREEN, HIGH);
+        delay(100);
+        digitalWrite(GREEN, LOW);
+        delay(100);
+      }
       return;
     }
     else
@@ -128,6 +164,13 @@ void Network::firestoreDataUpdate(double temp, String position, double conductan
     if (Firebase.Firestore.createDocument(&fbdo, FIREBASE_PROJECT_ID, "", documentPath.c_str(), content.raw()))
     {
       Serial.printf("ok\n%s\n\n", fbdo.payload().c_str());
+      for (int iteration = 0; iteration < 3; iteration++)
+      {
+        digitalWrite(GREEN, HIGH);
+        delay(100);
+        digitalWrite(GREEN, LOW);
+        delay(100);
+      }
       return;
     }
     else

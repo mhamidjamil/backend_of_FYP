@@ -3,6 +3,13 @@
 
 #include <WiFi.h>
 #include <Firebase_ESP_Client.h>
+#include <Arduino.h>
+// #define RED 18
+// #define GREEN 23
+// #define BLUE 19
+// pinMode(RED, OUTPUT);
+// pinMode(GREEN, OUTPUT);
+// pinMode(BLUE, OUTPUT);
 class Network
 {
 private:
@@ -20,7 +27,7 @@ public:
   Network();
   void initWiFi();
   void firestoreDataUpdate(double temp, double humi);
-   void firestoreDataUpdate(double temp, String position, double conductance, double resistance, double resistive_voltages, double snore_voltages);
+  void firestoreDataUpdate(double temp, String position, double conductance, double resistance, double resistive_voltages, double snore_voltages);
 };
 
 #endif

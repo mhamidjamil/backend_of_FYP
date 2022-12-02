@@ -24,6 +24,11 @@ float filterd_Conductance_voltage = 0.0;
 float filterd_snore_voltages = 0.0;
 
 // ? data manager variables end
+// 18 -> Red , 23 -> Green , 19 -> Blue
+// #define RED 18
+// #define GREEN 23
+// #define BLUE 19
+
 void tempTask(void *pvParameters);
 bool Update_values();
 void triggerGetTemp();
@@ -109,6 +114,9 @@ bool Update_values()
 void setup()
 {
     Serial.begin(115200);
+    // pinMode(RED, OUTPUT);
+    // pinMode(GREEN, OUTPUT);
+    // pinMode(BLUE, OUTPUT);
     Serial.println();
     Serial.println("DHT ESP32 example with tasks");
 
