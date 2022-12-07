@@ -30,9 +30,6 @@ public:
   void firestoreDataUpdate(double temp, String position, double conductance,
                            double resistance, double resistive_voltages,
                            double snore_voltages);
-  void firestoreDataUpdate(String user_ID, double temp, String position,
-                           double conductance, double resistance,
-                           double resistive_voltages, double snore_voltages);
 };
 
 #endif

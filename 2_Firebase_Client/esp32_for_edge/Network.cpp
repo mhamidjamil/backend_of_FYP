@@ -183,7 +183,8 @@ void Network::firestoreDataUpdate(String user_ID, double temp, String position,
                                   double snore_voltages) {
   if (WiFi.status() == WL_CONNECTED && Firebase.ready()) {
     //    String documentPath = "Patient/patient_1";
-    String documentPath = "users/SKdRiOAIL4NMiAkgrfmq";
+    // String documentPath = "users/SKdRiOAIL4NMiAkgrfmq";
+    String documentPath = "users/" + user_ID;
 
     FirebaseJson content;
 
